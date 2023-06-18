@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_RunningState" Id="{5ced025a-cdbb-4bfd-aed6-e63f3e04df8b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_RunningState IMPLEMENTS I_State
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	pConveyorSystem : POINTER TO FB_ConveyorSystem;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Description" Id="{483a0495-1b7c-4bd5-8b39-3853b34c992a}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Description : STRING
+]]></Declaration>
+      <Get Name="Get" Id="{3bb49784-7f07-44db-8ce1-d6b429b4a209}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Description := 'Running state';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="DetectedPartSensor1" Id="{b6e721e9-1198-412b-8ade-e1726be0b72f}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD DetectedPartSensor1 : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DetectedPartSensor2" Id="{a8d2e503-f120-4838-9be8-38869cca7b99}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD DetectedPartSensor2 : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pConveyorSystem^.SetState(pConveyorSystem^.IdleState);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DetectedWeightSensor" Id="{ade77ac5-e2fc-4cfb-8cb0-1c03c6c27c99}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD DetectedWeightSensor : BOOL
+VAR
+	fWeight : REAL;
+	fbRandomNumber : DRAND;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF pConveyorSystem^.aItemWeights[pConveyorSystem^.nCount] = 0 THEN
+	pConveyorSystem^.SetState(pConveyorSystem^.IdleState);
+	fbRandomNumber(SEED := 1, Num => fWeight);
+	fWeight := fWeight * 1000 + 5.0;
+	pConveyorSystem^.SetWeight(fWeight);
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{ee0d9f84-997e-4011-9258-fb3236e92f84}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	pConveyorSystem : POINTER TO FB_ConveyorSystem;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.pConveyorSystem := pConveyorSystem;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PressEmergencyStop" Id="{c867ca6c-f8c8-4393-ab87-257387785204}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD PressEmergencyStop : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pConveyorSystem^.SetState(pConveyorSystem^.EmergencyStopState);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PressStart" Id="{e3d979a2-19ab-4e98-abf7-24f0591f8b6f}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD PressStart : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PressStop" Id="{0b53e972-ca65-43a9-a88a-47ea55764d9f}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD PressStop : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ProcessedWeight" Id="{b219b61f-c763-492c-aa85-e029902ce541}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD ProcessedWeight : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_RunningState">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.Description.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.DetectedPartSensor1">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.DetectedPartSensor2">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.DetectedWeightSensor">
+      <LineId Id="14" Count="0" />
+      <LineId Id="17" Count="2" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.PressEmergencyStop">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.PressStart">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.PressStop">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RunningState.ProcessedWeight">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

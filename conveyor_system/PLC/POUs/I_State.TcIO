@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_State" Id="{7077d6f2-af75-4940-9f81-39240c480972}">
+    <Declaration><![CDATA[INTERFACE I_State
+]]></Declaration>
+    <Property Name="Description" Id="{fccbae2c-8d35-49aa-9486-489996ac39de}">
+      <Declaration><![CDATA[PROPERTY Description : STRING]]></Declaration>
+      <Get Name="Get" Id="{d900df21-e5ef-484e-91f8-86586596cd0e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="DetectedPartSensor1" Id="{b7326d1e-3882-4365-a65e-3d2f84738e34}">
+      <Declaration><![CDATA[METHOD DetectedPartSensor1 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="DetectedPartSensor2" Id="{036f2692-c892-4b92-9cde-39234bc3f211}">
+      <Declaration><![CDATA[METHOD DetectedPartSensor2 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="DetectedWeightSensor" Id="{969cf619-fcb0-4e53-91b6-74ce40a43ac2}">
+      <Declaration><![CDATA[METHOD DetectedWeightSensor : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="PressEmergencyStop" Id="{b3e75f9c-9ca4-4351-8c78-7257e7b10cb0}">
+      <Declaration><![CDATA[METHOD PressEmergencyStop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="PressStart" Id="{f8e9b630-d84e-490e-991e-88d478b496a3}">
+      <Declaration><![CDATA[METHOD PressStart : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="PressStop" Id="{3d536037-4385-4003-879f-723b14d4144c}">
+      <Declaration><![CDATA[METHOD PressStop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="ProcessedWeight" Id="{01b8e78e-f948-457d-8004-f458df044f30}">
+      <Declaration><![CDATA[METHOD ProcessedWeight : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

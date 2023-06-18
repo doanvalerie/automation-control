@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{2ac301fe-ca5a-4f78-8ed4-0564a60cfe4d}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fbConveyorSystem 		: FB_ConveyorSystem();
+	sState 					: STRING;
+	nCount 					: INT;
+	bPressEmergencyStop 	: BOOL;
+	bPressStart 			: BOOL;
+	bPressStop 				: BOOL;
+	bDetectedPartSensor1 	: BOOL;
+	bDetectedWeightSensor 	: BOOL;
+	bDetectedPartSensor2 	: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbConveyorSystem(bPressEmergencyStop := bPressEmergencyStop,
+				 bPressStart := bPressStart,
+				 bPressStop := bPressStop,
+				 bDetectedPartSensor1 := bDetectedPartSensor1,
+				 bDetectedWeightSensor := bDetectedWeightSensor,
+				 bDetectedPartSensor2 := bDetectedPartSensor2);
+				 
+sState := fbConveyorSystem.ipState.Description;
+nCount := fbConveyorSystem.nCount;
+
+bPressEmergencyStop := FALSE;
+bPressStart := FALSE;
+bPressStop := FALSE;]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="10" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

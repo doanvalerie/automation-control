@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_ConveyorSystem" Id="{733020f7-d66e-48dc-b264-a00595584331}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FB_ConveyorSystem
+VAR_INPUT
+	bPressEmergencyStop : BOOL;
+	bPressStart : BOOL;
+	bPressStop : BOOL;
+	bDetectedPartSensor1: BOOL;
+	bDetectedWeightSensor : BOOL;
+	bDetectedPartSensor2 : BOOL;
+END_VAR
+VAR_OUTPUT
+	ipState : I_STATE := fbOffState;
+	nCount : INT := 0;
+	aItemWeights : ARRAY[1..100] OF REAL;
+END_VAR
+VAR
+	fbOffState : FB_OffState(THIS);
+	fbIdleState : FB_IdleState(THIS);
+	fbRunningState : FB_RunningState(THIS);
+	fbEmergencyStopState : FB_EmergencyStopState(THIS);
+	
+	rtrigPressEmergencyStop : R_TRIG;
+	rtrigPressStart : R_TRIG;
+	rtrigPressStop : R_TRIG;
+	rtrigDetectedPartSensor1 : R_TRIG;
+	rtrigDetectedWeightSensor : R_TRIG;
+	rtrigProcessedWeight : R_TRIG;
+	rtrigDetectedPartSensor2 : R_TRIG;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[rtrigPressEmergencyStop(CLK := bPressEmergencyStop);
+rtrigPressStart(CLk := bPressStart);
+rtrigPressStop(CLK := bPressStop);
+rtrigDetectedPartSensor1(CLK := bDetectedPartSensor1);
+rtrigDetectedWeightSensor(CLK := bDetectedWeightSensor);
+IF (nCount > 0) THEN
+	rtrigProcessedWeight(CLK := (aItemWeights[nCount] <> 0));
+END_IF
+rtrigDetectedPartSensor2(CLK := bDetectedPartSensor2);
+
+IF (rtrigPressEmergencyStop.Q) THEN
+	ipState.PressEmergencyStop();
+END_IF
+
+IF (rtrigPressStart.Q) THEN
+	ipState.PressStart();
+END_IF
+
+IF (rtrigPressStop.Q) THEN
+	ipState.PressStop();
+END_IF
+
+IF (rtrigDetectedPartSensor1.Q) THEN
+	ipState.DetectedPartSensor1();
+END_IF
+
+IF (rtrigDetectedWeightSensor.Q) THEN
+	ipState.DetectedWeightSensor();
+END_IF
+
+IF (rtrigProcessedWeight.Q) THEN
+	ipState.ProcessedWeight();
+END_IF
+
+IF (rtrigDetectedPartSensor2.Q) THEN
+	ipState.DetectedPartSensor2();
+END_IF]]></ST>
+    </Implementation>
+    <Property Name="EmergencyStopState" Id="{add011be-7f13-4e19-b15d-e191eae6ebc9}">
+      <Declaration><![CDATA[PROPERTY EmergencyStopState : I_STATE]]></Declaration>
+      <Get Name="Get" Id="{7664836a-4060-4100-8de8-54008ed79152}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EmergencyStopState := THIS^.fbEmergencyStopState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{dd1d3f16-4084-432d-a511-6b0532af3e8b}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IdleState" Id="{fe586a85-a4dc-46c7-ad65-dcee2c9b3e4f}">
+      <Declaration><![CDATA[PROPERTY IdleState : I_STATE]]></Declaration>
+      <Get Name="Get" Id="{b3838338-cd34-4628-a709-2852eb9a6774}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IdleState := THIS^.fbIdleState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="OffState" Id="{5bc4a8d1-f250-4b28-8b96-5d8fc5bde0c4}">
+      <Declaration><![CDATA[PROPERTY OffState : I_STATE]]></Declaration>
+      <Get Name="Get" Id="{555970ef-4826-47dc-aa11-34433187f6f0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OffState := THIS^.fbOffState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="RunningState" Id="{5833d271-5181-4013-a35d-e29acf84ba2a}">
+      <Declaration><![CDATA[PROPERTY RunningState : I_STATE]]></Declaration>
+      <Get Name="Get" Id="{9ac3bdf9-bdd1-4582-9b73-0e00c5e71e2c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RunningState := THIS^.fbRunningState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SetCount" Id="{285608eb-25d9-44cb-b8c7-08ef10f5f3fb}">
+      <Declaration><![CDATA[METHOD SetCount : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.nCount := THIS^.nCount + 1;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetState" Id="{71afc215-7f19-4753-ac11-0dec6a1b7f21}">
+      <Declaration><![CDATA[METHOD SetState : BOOL
+VAR_INPUT
+	newState : I_State;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.ipState := newState;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetWeight" Id="{81eb608a-7f77-4d11-a670-ff826acce9d5}">
+      <Declaration><![CDATA[METHOD SetWeight : BOOL
+VAR_INPUT
+	rItemWeight : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.aItemWeights[THIS^.nCount] := rItemWeight;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_ConveyorSystem">
+      <LineId Id="67" Count="3" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="170" Count="2" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="71" Count="14" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="117" Count="1" />
+      <LineId Id="137" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="140" Count="1" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="125" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.EmergencyStopState.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.IdleState.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.OffState.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.RunningState.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.SetCount">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.SetState">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ConveyorSystem.SetWeight">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
